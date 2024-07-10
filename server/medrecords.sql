@@ -1,9 +1,8 @@
-CREATE DATABASE medrecords;
+CREATE DATABASE IF NOT EXISTS medrecords;
 USE medrecords;
 
-CREATE TABLE records (
+CREATE TABLE IF NOT EXISTS records (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  age INT NOT NULL,
-  diagnosis TEXT NOT NULL
+  title VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL
 );

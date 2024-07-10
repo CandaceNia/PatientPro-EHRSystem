@@ -1,61 +1,93 @@
-// server.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql2');
 const cors = require('cors');
+const mysql = require('mysql2');
 
 const app = express();
+const port = 3001;
+
 app.use(cors());
 app.use(bodyParser.json());
 
-const db = mysql.createConnection({
+const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root', // your MySQL username
-  password: 'password', // your MySQL password
-  database: 'medrecords' // your database name
+  user: 'root', 
+  password: 'password123', 
+  database: 'medrecords' 
 });
 
-db.connect(err => {
-  if (err) {
-    console.error('Database connection failed:', err.stack);
-    return;
-  }
-  console.log('Connected to database.');
+connection.connect(err => {
+  if (err) throw err;
+  console.log('Connected to MySQL');
 });
 
-app.get('/records', (req, res) => {
-  db.query('SELECT * FROM records', (err, results) => {
-    if (err) throw err;
-    res.json(results);
+
+// Get all patients
+app.get('/patients', (req, res) => {
+  connection.query('SELECT * FROM patients', (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(results);
+    }
   });
 });
 
-app.post('/records', (req, res) => {
-  const { name, age, diagnosis } = req.body;
-  db.query('INSERT INTO records (name, age, diagnosis) VALUES (?, ?, ?)', [name, age, diagnosis], (err, results) => {
-    if (err) throw err;
-    res.json({ id: results.insertId });
-  });
-});
-
-app.put('/records/:id', (req, res) => {
+// Get a specific patient by ID
+app.get('/patients/:id', (req, res) => {
   const { id } = req.params;
-  const { name, age, diagnosis } = req.body;
-  db.query('UPDATE records SET name = ?, age = ?, diagnosis = ? WHERE id = ?', [name, age, diagnosis, id], (err) => {
-    if (err) throw err;
-    res.sendStatus(200);
+  connection.query('SELECT * FROM patients WHERE id = ?', [id], (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else if (results.length === 0) {
+      res.status(404).send({ message: 'Patient not found' });
+    } else {
+      res.send(results[0]);
+    }
   });
 });
 
-app.delete('/records/:id', (req, res) => {
+// Add a new patient
+app.post('/patients', (req, res) => {
+  const { name } = req.body;
+  connection.query('INSERT INTO patients (name) VALUES (?)', [name], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send({ id: result.insertId, name });
+    }
+  });
+});
+
+// Update a patient
+app.put('/patients/:id', (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM records WHERE id = ?', [id], (err) => {
-    if (err) throw err;
-    res.sendStatus(200);
+  const { name } = req.body;
+  connection.query('UPDATE patients SET name = ? WHERE id = ?', [name, id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else if (result.affectedRows === 0) {
+      res.status(404).send({ message: 'Patient not found' });
+    } else {
+      res.send({ id, name });
+    }
   });
 });
 
-app.listen(3001, () => {
-  console.log('Server running on port 3001');
+// Delete a patient
+app.delete('/patients/:id', (req, res) => {
+  const { id } = req.params;
+  connection.query('DELETE FROM patients WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else if (result.affectedRows === 0) {
+      res.status(404).send({ message: 'Patient not found' });
+    } else {
+      res.send({ message: 'Patient deleted' });
+    }
+  });
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });

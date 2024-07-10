@@ -1,5 +1,3 @@
-// src/components/RecordList.js
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -14,12 +12,10 @@ const RecordList = () => {
 
   return (
     <div>
-      <h1>Medical Records</h1>
+      <h1>Record List</h1>
       <ul>
         {records.map(record => (
-          <li key={record.id}>
-            {record.name}, {record.age}, {record.diagnosis}
-          </li>
+          <li key={record.id}>{record.title}</li>
         ))}
       </ul>
     </div>
