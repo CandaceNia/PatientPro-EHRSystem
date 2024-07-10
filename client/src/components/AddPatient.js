@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { TextField, Button, Container, Typography, Paper } from '@mui/material';
+
 
 const AddPatient = () => {
   const [name, setName] = useState('');
@@ -18,21 +20,27 @@ const AddPatient = () => {
   };
 
   return (
-    <div>
-      <h1>Add Patient</h1>
+    <Container maxWidth="sm">
+    <Paper style={{ padding: '20px', marginTop: '20px' }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Add Patient
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <button type="submit">Add</button>
+        <TextField
+          label="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Add Patient
+        </Button>
       </form>
-    </div>
-  );
+    </Paper>
+  </Container>
+);
 };
 
 export default AddPatient;

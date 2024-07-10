@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 
 const PatientList = () => {
   const [patients, setPatients] = useState([]);
@@ -26,21 +27,47 @@ const PatientList = () => {
       });
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/patients/${id}`);
+      setPatients(patients.filter((patient) => patient.id !== id));
+    } catch (error) {
+      console.error('Error deleting patient:', error);
+    }
+  };
+
   return (
-    <div>
-      <h1>Patient List</h1>
-      <Link to="/add-patient">Add Patient</Link>
-      <ul>
-        {patients.map(patient => (
-          <li key={patient.id}>
-            {patient.name}
-            <button onClick={() => navigate(`/edit-patient/${patient.id}`)}>Edit</button>
-            <button onClick={() => deletePatient(patient.id)}>Delete</button>
-          </li>
+    <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Name</TableCell>
+          <TableCell align="right">Actions</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {patients.map((patient) => (
+          <TableRow key={patient.id}>
+            <TableCell>{patient.name}</TableCell>
+            <TableCell align="right">
+              <Button component={Link} to={`/edit-patient/${patient.id}`} variant="contained" color="primary">
+                Edit
+              </Button>
+              <Button
+                onClick={() => handleDelete(patient.id)}
+                variant="contained"
+                color="secondary"
+                style={{ marginLeft: '10px' }}
+              >
+                Delete
+              </Button>
+            </TableCell>
+          </TableRow>
         ))}
-      </ul>
-    </div>
-  );
+      </TableBody>
+    </Table>
+  </TableContainer>
+);
 };
 
 export default PatientList;
