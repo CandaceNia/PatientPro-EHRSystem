@@ -1,50 +1,35 @@
-/* src/App.css */
-
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
 }
 
-h1 {
-  color: #333;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather', serif;
 }
 
-form {
-  margin-bottom: 20px;
+.MuiContainer-root {
+  margin-top: 20px;
 }
 
-input, button {
-  padding: 10px;
-  margin: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.MuiPaper-root {
+  padding: 20px;
 }
 
-input {
-  width: calc(100% - 24px);
+.MuiButton-root {
+  margin-top: 20px;
 }
 
-button {
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
+.MuiTableContainer-root {
+  margin-top: 20px;
 }
 
-button:hover {
-  background-color: #0056b3;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  background-color: white;
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+a:hover {
+  text-decoration: underline;
 }

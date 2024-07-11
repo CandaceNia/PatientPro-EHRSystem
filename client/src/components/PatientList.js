@@ -48,7 +48,11 @@ const PatientList = () => {
       <TableBody>
         {patients.map((patient) => (
           <TableRow key={patient.id}>
-            <TableCell>{patient.name}</TableCell>
+            <TableCell>
+              <Link to={`/patient-profile/${patient.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                {patient.name}
+              </Link>
+            </TableCell>
             <TableCell align="right">
               <Button component={Link} to={`/edit-patient/${patient.id}`} variant="contained" color="primary">
                 Edit
@@ -69,5 +73,6 @@ const PatientList = () => {
   </TableContainer>
 );
 };
+
 
 export default PatientList;
